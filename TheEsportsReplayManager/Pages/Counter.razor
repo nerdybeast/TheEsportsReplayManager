@@ -1,0 +1,56 @@
+﻿@page "/counter"
+
+@using Microsoft.Extensions.Logging;
+@using TheEsportsReplayManager.Services;
+
+@inject ILogger<Counter> Logger;
+@inject ILocalFileSystemService LocalFileSystemService;
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<button class="btn btn-primary" @onclick="GetReplays">Get Replays</button>
+
+@if (loading)
+{
+    <div>Loading Replays...</div>
+}
+else
+{
+    @foreach (var replay in replays)
+    {
+        <div>@replay</div>
+    }
+}
+
+@code {
+
+    private int currentCount = 0;
+    private bool loading = false;
+    private List<string> replays = new();
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+    private async Task GetReplays()
+    {
+        try
+        {
+            loading = true;
+            replays = await LocalFileSystemService.GetReplaysFromDisk();
+            throw new Exception("test test test");
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to fetch replay files from disk");
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+}
