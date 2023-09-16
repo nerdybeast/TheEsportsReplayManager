@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using TheEsportsReplayManager.Data;
 using TheEsportsReplayManager.Pages;
+using TheEsportsReplayManager.Repositories;
 using TheEsportsReplayManager.Services;
 
 namespace TheEsportsReplayManager
@@ -13,8 +14,11 @@ namespace TheEsportsReplayManager
 
             //Pages
             builder.Services.AddTransient<Counter>();
+            builder.Services.AddTransient<Dashboard>();
 
             builder.Services.AddSingleton<ILocalFileSystemService, LocalFileSystemService>();
+            builder.Services.AddSingleton<ILocalReplayRepository, LocalReplayRepository>();
+            builder.Services.AddSingleton<IReplayManagementService, ReplayManagementService>();
 
             builder
                 .UseMauiApp<App>()

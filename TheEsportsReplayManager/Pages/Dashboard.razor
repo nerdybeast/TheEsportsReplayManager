@@ -1,0 +1,48 @@
+﻿@page "/dashboard"
+
+@using Microsoft.Extensions.Logging;
+@using TheEsportsReplayManager.Models;
+@using TheEsportsReplayManager.Services;
+
+@inject ILogger<Counter> Logger;
+@inject IReplayManagementService ReplayManagementService;
+
+<h3>Dashboard</h3>
+
+@if (loading)
+{
+    <div>Loading Replays...</div>
+}
+
+@foreach (var replayState in ReplayManagementService.LoadedReplays)
+{
+    <div>@replayState.FileName</div>
+}
+
+@code {
+
+    private bool loading = false;
+    private List<ReplayDetail> replayDetails = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetReplays();
+    }
+
+    private async Task GetReplays()
+    {
+        try
+        {
+            loading = true;
+            replayDetails = await ReplayManagementService.GetReplayDetails();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to fetch replay files from disk");
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+}
