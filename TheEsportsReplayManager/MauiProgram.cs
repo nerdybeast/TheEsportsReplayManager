@@ -3,6 +3,8 @@ using TheEsportsReplayManager.Data;
 using TheEsportsReplayManager.Pages;
 using TheEsportsReplayManager.Repositories;
 using TheEsportsReplayManager.Services;
+using Microsoft.AspNetCore.Components.Authorization;
+using TheEsportsReplayManager.Auth;
 
 namespace TheEsportsReplayManager
 {
@@ -19,6 +21,17 @@ namespace TheEsportsReplayManager
             builder.Services.AddSingleton<ILocalFileSystemService, LocalFileSystemService>();
             builder.Services.AddSingleton<ILocalReplayRepository, LocalReplayRepository>();
             builder.Services.AddSingleton<IReplayManagementService, ReplayManagementService>();
+
+            builder.Services.AddSingleton(new Auth0Client(new Auth0ClientOptions
+            {
+                Domain = "sith-oath.auth0.com",
+                ClientId = "UGNoLg04JZecHilz1zmuLp0MGJpHne3J",
+                Scope = "openid profile email",
+                RedirectUri = "myapp://callback"
+            }));
+
+            builder.Services.AddAuthorizationCore();
+            builder.Services.AddScoped<AuthenticationStateProvider, Auth0AuthenticationStateProvider>();
 
             builder
                 .UseMauiApp<App>()
