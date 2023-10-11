@@ -19,6 +19,20 @@
     <div>@replayState.FileName</div>
 }
 
+@foreach (ReplayDetail replayDetail in replayDetails)
+{
+    <div>
+        Id: @replayDetail.Id - File Path: @replayDetail.FilePath
+        @if (replayDetail.HasErrors)
+        {
+            @foreach (var error in replayDetail.Errors)
+            {
+                <div>Error: @error.Message</div>
+            }
+        }
+    </div>
+}
+
 @code {
 
     private bool loading = false;

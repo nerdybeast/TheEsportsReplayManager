@@ -6,7 +6,7 @@ public class LocalFileSystemService : ILocalFileSystemService
     {
         const string replayFolder = "C:\\Users\\Micha\\OneDrive\\Documents\\My Games\\Rocket League\\TAGame\\Demos";
         List<string> fullyQualifiedReplayFileNames = new(Directory.EnumerateFiles(replayFolder));
-        await Task.Delay(5000);
+        //await Task.Delay(5000);
         return await Task.FromResult(fullyQualifiedReplayFileNames);
     }
 }
